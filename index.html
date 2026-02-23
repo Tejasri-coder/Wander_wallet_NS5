@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WanderWallet | Smart Travel Estimator</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+ 
+    /* Top-right buttons */
+    .top-right-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .top-right-buttons button {
+      padding: 8px 16px;
+      background: transparent;
+      border: 2px solid #fff;
+      border-radius: 25px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .top-right-buttons button:hover {
+      background: #fff;
+      color: #764ba2;
+      box-shadow: 0 0 15px #fff;
+    }
+
+    /* Container */
+    .container {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      max-width: 650px;
+      width: 100%;
+      padding: 40px;
+      text-align: center;
+    }
+
+    /* Intro Animation for Title */
+    h2 {
+      margin-bottom: 25px;
+      font-weight: 600;
+      font-size: 2.2rem;
+      letter-spacing: 1.5px;
+      animation: titleEntrance 1.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes titleEntrance {
+      0% { opacity: 0; transform: scale(0.5) translateY(-50px); filter: blur(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    }
+
+    /* Inputs */
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 125px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+    }
+
+    .calc-btn {
+      background: #fff;
+      color: #764ba2;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 20px;
+    }
+
+    .calc-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+    .chart-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 15px;
+      height: 300px;
+      margin-bottom: 25px;
+    }
+
+    /* Glowing Multicolor Buttons */
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .btn-group button {
+      width: 100px;
+      padding: 10px 0;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      background: #36a2eb;
+      animation: glowColors 4s infinite alternate;
+      transition: transform 0.2s;
+    }
+
+    .btn-group button:hover { transform: scale(1.1); }
+
+    @keyframes glowColors {
+      0% { box-shadow: 0 0 10px #ff3c78; background: #ff3c78; }
+      33% { box-shadow: 0 0 10px #36a2eb; background: #36a2eb; }
+      66% { box-shadow: 0 0 10px #ffeb3b; background: #ffeb3b; color: #333; }
+      100% { box-shadow: 0 0 10px #67eb36; background: #67eb36; }
+    }
+
+    footer { margin-top: 30px; font-size: 0.8rem; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+  <nav class="top-right-buttons">
+    <button onclick="alert('WanderWallet: A Client-Server Visualizer\nBuilt for easy tour budgeting.')">About</button>
+    <button onclick="window.location.href='mailto:nsxy09@gmail.com'">Help</button>
+  </nav>
+
+  <div class="container">
+    <h2>WanderWallet</h2>
+    
+    <div class="input-row">
+      <input type="number" id="dist" placeholder="Distance" value="100">
+      <input type="number" id="members" placeholder="Members" value="2">
+      <input type="number" id="days" placeholder="Days" value="1">
+      <select id="v_type">
+        <option value="bike">Bike</option>
+        <option value="car">Car</option>
+      </select>
+    </div>
+
+    <button class="calc-btn" onclick="updateServerData()">Calculate & Sync</button>
+
+    <div class="chart-container">
+      <canvas id="myChart"></canvas>
+    </div>
+
+    <div class="btn-group">
+      <button onclick="changeChart('bar')">Bar</button>
+      <button onclick="changeChart('pie')">Pie</button>
+      <button onclick="changeChart('doughnut')">Doughnut</button>
+      <button onclick="changeChart('polarArea')">Polar</button>
+      <button onclick="changeChart('line')">Line</button>
+    </div>
+  </div>
+
+  <footer>&copy; N SATISH KUMAR  & B Teja Sree <br>
+    2026</footer>
+
+  <script>
+    let myChart;
+    let currentData = { labels: [], datasets: [] };
+
+    async function updateServerData() {
+      const payload = {
+        distance: document.getElementById('dist').value,
+        members: document.getElementById('members').value,
+        days: document.getElementById('days').value,
+        vehicle: document.getElementById('v_type').value
+      };
+
+      try {
+        const response = await fetch('/calculate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        currentData = {
+          labels: result.labels,
+          datasets: [{
+            label: 'INR Expenditure',
+            data: result.values,
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'],
+            borderColor: '#fff',
+            borderWidth: 2
+          }]
+        };
+        renderChart('bar');
+      } catch (e) {
+        alert("Server Error: Ensure app.py is running!");
+      }
+    }
+
+    function renderChart(type) {
+      if (myChart) myChart.destroy();
+      const ctx = document.getElementById('myChart').getContext('2d');
+      myChart = new Chart(ctx, {
+        type: type,
+        data: currentData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#fff' } } },
+          scales: (type === 'bar' || type === 'line') ? {
+            y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+            x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+          } : {}
+        }
+      });
+    }
+
+    function changeChart(type) { renderChart(type); }
+    window.onload = updateServerData;
+  </script>
+</body>
+</html>
