@@ -1,0 +1,44 @@
+Wander_Wallet_NS6: Tour Budget Visualizer
+WanderWallet is a full-stack client-server application designed to provide travelers with an instant, visual breakdown of their trip expenses. It bridges the gap between complex logistical planning and user-friendly design by combining real-time data processing with interactive visualizations.
+🚀 Features
+ * Request-Response Architecture: Uses a Python Flask backend to handle logic and an HTML/JS frontend for the user interface.
+ * Real-time Calculations: Processes distance, number of members, and tour duration against "pretrained" values for fuel efficiency and daily costs.
+ * Dynamic Visualizations: Generates five interactive chart types (Bar, Pie, Doughnut, Polar Area, and Line) using Chart.js to help users understand their spending weight.
+ * Modern Glassmorphism UI: Features a sleek, semi-transparent frosted glass design with vibrant linear gradients and glowing interactive elements.
+ * Intro Animations: Professional scale-and-blur entrance animations for a polished first impression.
+
+🛠️ Tech Stack
+
+ * Backend: Python (Flask)
+ * Frontend: HTML5, CSS3 (Custom Animations), JavaScript (ES6+)
+ * Data Visualization: Chart.js
+ * Communication: Asynchronous JSON data exchange via Fetch API
+
+📐 Math Logic
+
+The application uses specific real-world variables stored securely on the server:
+ * Fuel Expense: Calculated as \frac{Distance}{Efficiency} \times Fuel Price.
+ * Accommodation: Automatically calculates costs based on nights stayed (e.g., ₹0 for same-day returns).
+ * Rates: * Bike: 30 km/liter at ₹109.52/liter.
+   * Car: 11 km/liter at ₹101.32/liter.
+   * Daily Costs: ₹270 for food and ₹700 for accommodation per person.
+💻 Installation & Execution
+1. Project Structure
+To ensure the server functions correctly, organize your files as follows:
+WanderWallet/NS6/
+├── app.py              # The Server (Python)
+└── templates/          # MUST be named exactly 'templates'
+    └── index.html      # The Client (HTML/JS)
+
+2. Setup
+ * Open the project folder in VS Code.
+ * Install Flask via the terminal:
+   pip install flask
+
+3. Run
+ * Start the server:
+   python app.py
+
+ * Open your browser and navigate to http://127.0.0.1:5000.
+👤 Authors
+N SATISH KUMAR & B Teja sri
